@@ -7,7 +7,6 @@ venv/
 __pycache__/
 
 # Ignore data and results
-/data
 /_deprecated/
 
 # Ignore temporary files
