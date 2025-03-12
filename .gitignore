@@ -9,7 +9,6 @@ __pycache__/
 # Ignore data and results
 /data
 /_deprecated/
-/chroma_db
 
 # Ignore temporary files
 *.log
