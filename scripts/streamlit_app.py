@@ -23,27 +23,69 @@ st.set_page_config(
 # Apply Custom Styling
 st.markdown("""
     <style>
+    body {
+        background-color: #121212;
+        color: white;
+    }
+            
+    /* Remove the "Press Enter to submit form" text */
+    .stForm .stTextInput > div > div > label {
+        display: none !important;
+    }
+    
+    /* Optional: Further customize the form input */
+    .stForm .stTextInput > div > div > input {
+        width: 100% !important;
+        padding: 10px !important;
+        border-radius: 8px !important;
+        border: 2px solid #E50914 !important;
+        background-color: #222 !important;
+        color: white !important;
+        font-size: 16px !important;
+    }
+    
+    /* Customize the submit button to match */
+    .stForm button {
+        background-color: #E50914 !important;
+        color: white !important;
+        border-radius: 8px !important;
+        padding: 10px 24px !important;
+        transition: background 0.3s ease-in-out !important;
+    }
+    
+    .stForm button:hover {
+        background-color: #A0070E !important;
+            
     .stTextInput>div>div>input {
         font-size: 16px;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #E50914;
+        padding: 12px;
+        border-radius: 8px;
+        border: 2px solid #E50914;
+        background-color: #222;
+        color: white;
     }
     .stButton>button {
-        background-color: #E50914;
-        color: white;
+        background-color: #E50914 !important;
+        color: white !important;
         font-size: 16px;
-        border-radius: 10px;
-        padding: 8px 20px;
+        border-radius: 8px;
+        padding: 10px 24px;
+        transition: background 0.3s ease-in-out;
+    }
+    .stButton>button:hover {
+        background-color: #B20710 !important;
     }
     .stMarkdown {
         font-size: 18px;
+        color: white;
     }
     .stSelectbox>div>div>select {
         font-size: 16px;
         padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #E50914;
+        border-radius: 8px;
+        border: 2px solid #E50914;
+        background-color: #222;
+        color: white;
     }
     /* Tab styling */
     .stTabs [data-baseweb="tab-list"] {
@@ -52,15 +94,44 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] {
         height: 50px;
         white-space: pre-wrap;
-        background-color: #222;
+        # background-color: #222;
         border-radius: 4px 4px 0px 0px;
-        gap: 1px;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding: 12px;
+        color: white;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #E50914 !important;
+        # background-color: #E50914 !important;
         color: white !important;
+    }
+    .stSidebar {
+        background-color: #262730;
+        padding: 20px;
+        border-radius: 12px;
+    }
+    .stInfo {
+        background-color: #222;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 75vh; /* Adjust as needed */
+    }
+    .chat-messages {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+    .chat-input {
+        margin-top: auto;
+        display: flex;
+    }
+    .chat-input input {
+        flex-grow: 1;
+        margin-right: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -128,27 +199,80 @@ def submit_form():
 
 # Create filter sidebar - IMPORTANT: define filters before they're used in the tabs
 with st.sidebar:
-    st.header("📌 Filter Options")
+    st.header("Movie Filters")
     
-    # Rating filter
-    rating_options = ["Any", "G", "PG", "PG-13", "R", "TV-MA", "TV-14", "TV-PG", "TV-Y7"]
-    st.selectbox("Rating", rating_options, key="rating_filter")
+    # Rating Filter Popover
+    rating_popover = st.popover("Ratings")
+    with rating_popover:
+        st.subheader("Select Ratings")
+        rating_options = ["G", "PG", "PG-13", "R", "TV-MA", "TV-14", "TV-PG", "TV-Y7"]
+        
+        # Use checkboxes instead of multiselect
+        selected_ratings = []
+        for option in rating_options:
+            if st.checkbox(option, key=f"rating_{option}"):
+                selected_ratings.append(option)
+        
+        # Display selected ratings
+        st.session_state.rating_filter = selected_ratings[0] if selected_ratings else "Any"
+        
+        # Show current selection
+        if selected_ratings:
+            st.write("Selected: " + ", ".join(selected_ratings))
     
-    # Year filter
-    year_options = ["Any", "2000", "2010", "2015", "2020"]
-    st.selectbox("Released after year", year_options, key="year_filter")
+    # Year Filter Popover
+    year_popover = st.popover("Years")
+    with year_popover:
+        st.subheader("Released After")
+        year_options = ["2000", "2010", "2015", "2020"]
+        
+        # Use checkboxes for years
+        selected_years = []
+        for option in year_options:
+            if st.checkbox(option, key=f"year_{option}"):
+                selected_years.append(option)
+        
+        # Ensure only one year is selected
+        if len(selected_years) > 1:
+            st.warning("Please select only one year")
+            selected_years = [selected_years[-1]]
+        
+        st.session_state.year_filter = selected_years[0] if selected_years else "Any"
+        
+        # Show current selection
+        if selected_years:
+            st.write("Selected: " + ", ".join(selected_years))
     
-    # Type filter
-    type_options = ["Any", "Movie", "TV Show"]
-    st.selectbox("Content type", type_options, key="type_filter")
+    # Type Filter Popover
+    type_popover = st.popover("Type")
+    with type_popover:
+        st.subheader("Content Type")
+        type_options = ["Movie", "TV Show"]
+        
+        # Use checkboxes for types
+        selected_types = []
+        for option in type_options:
+            if st.checkbox(option, key=f"type_{option}"):
+                selected_types.append(option)
+        
+        # Ensure only one type is selected
+        if len(selected_types) > 1:
+            st.warning("Please select only one type")
+            selected_types = [selected_types[-1]]
+        
+        st.session_state.type_filter = selected_types[0] if selected_types else "Any"
+        
+        # Show current selection
+        if selected_types:
+            st.write("Selected: " + ", ".join(selected_types))
     
-    # Add some info about filters
-    st.info("Select filters to narrow down recommendations. Choose 'Any' to disable a filter.")
-    
-    # Add a clear button
+    # Clear conversation button
     if st.button("Clear Conversation"):
         st.session_state.messages = []
         st.rerun()
+    
+    # Info about filters
+    st.info("Click filter buttons to customize your recommendations.")
 
 # Title for the app
 st.title("🎬 Movie Recommendation Assistant")
@@ -158,7 +282,7 @@ tab1, tab2 = st.tabs(["🍿 Movie Recommendations", "📊 Movie Clusters"])
 
 # Tab 1: Movie Recommendation Chat Interface
 with tab1:
-    st.write("🍿 Tell me what kind of movie you're in the mood for, and I'll suggest something perfect!")
+    
     
     # Display previous messages
     for msg in st.session_state.messages:
@@ -168,9 +292,9 @@ with tab1:
     # Create a form for user input
     with st.form(key="question_form", clear_on_submit=True):
         user_input = st.text_input(
-            "🎬 What kind of movie are you in the mood for?", 
+            "", 
             key="user_question",
-            placeholder="E.g., 'Something with action and comedy' or 'A thought-provoking drama'"
+            placeholder="Looking for a movie?"
         )
         submit_button = st.form_submit_button("Get Recommendations", on_click=submit_form)
     
