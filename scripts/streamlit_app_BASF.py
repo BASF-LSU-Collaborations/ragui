@@ -5,6 +5,8 @@ import os
 import time
 import urllib.parse
 import streamlit.components.v1 as components
+import threading
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 # Ensure Python can find the 'scripts' folder
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -12,6 +14,23 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import tab components
 from scripts.tab1.document_search_tab import render_document_search_tab
 
+# Define file server function
+def start_file_server(port=8005):
+    # Save the current directory
+    original_dir = os.getcwd()
+    # Change to root directory
+    os.chdir('/')
+    
+    # Create and start the server
+    server = HTTPServer(('0.0.0.0', port), SimpleHTTPRequestHandler)
+    print(f"Serving files from / on port {port}...")
+    server.serve_forever()
+
+# Start the file server in a separate thread BEFORE any Streamlit code
+file_server_thread = threading.Thread(target=start_file_server, daemon=True)
+file_server_thread.start()
+
+# NOW start the Streamlit UI code
 # Set Streamlit Page Config
 st.set_page_config(
     page_title="BASF Document Assistant",
@@ -19,6 +38,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
 
 # Apply Custom Styling
 st.markdown("""
@@ -121,3 +141,5 @@ with tab1:
     render_document_search_tab()
 
 # Tab 2: Document Clustering Visualization
+
+
