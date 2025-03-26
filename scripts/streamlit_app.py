@@ -20,40 +20,30 @@ st.set_page_config(
 # Custom CSS 
 st.markdown("""
     <style>
-    body {
-        background-color: #121212;
-        color: white;
+    .stSpinner > div {
+        animation: pulse 1.5s infinite;
+        color: #E50914 !important;
     }
     
-    /* Main container for filters */
-    .stPopover {
-        margin-right: 0 !important;
+    /* Smooth transition for recommendations */
+    .stChatMessage {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out forwards;
     }
     
-    /* Column spacing adjustment */
-    [data-testid="column"] {
-        padding: 0 2px !important;
-        margin: 0 !important;
-        gap: 0 !important;
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Button spacing */
-    .stButton>button {
-        margin-left: 0 !important;
+    /* Hover effects for filter buttons */
+    .stPopover > button {
+        transition: all 0.3s ease !important;
     }
     
-    .stForm .stTextInput > div > div > input {
-        width: 100% !important;
-        padding: 10px !important;
-        background-color: #222 !important;
-        color: white !important;
-        font-size: 16px !important;
-    }
-    
-    .stForm button {
-        border-radius: 8px !important;
-        padding: 10px 24px !important;
-        transition: background 0.6s ease-in-out !important;
+    .stPopover > button:hover {
+        background-color: rgba(229, 9, 20, 0.1) !important;
+        transform: scale(1.05) !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -115,17 +105,27 @@ def submit_form():
 st.title("🎬 Movie Recommendation Assistant")
 
 
+# filter options
+rating_options = ["G", "PG", "PG-13", "R", "TV-MA", "TV-14", "TV-PG", "TV-Y7"]
+year_options = ["2000", "2010", "2015", "2020"]
+type_options = ["Movie", "TV Show"]
+
 # Filter container
 filter_container = st.container()
 with filter_container:
-    # Use columns with gap="small" and adjusted widths
     col1, col2, col3 = st.columns([1,1,1], gap="small")
     
     with col1:
         rating_popover = st.popover("📊 Ratings", use_container_width=True)
         with rating_popover:
             st.subheader("Select Ratings")
-            rating_options = ["G", "PG", "PG-13", "R", "TV-MA", "TV-14", "TV-PG", "TV-Y7"]
+            
+            # clear button
+            if st.button("Clear Selection", key="clear_ratings"):
+                st.session_state.rating_filter = []
+                for option in rating_options:
+                    st.session_state[f"rating_{option}"] = False
+            
             selected_ratings = []
             for option in rating_options:
                 if st.checkbox(option, key=f"rating_{option}"):
@@ -138,7 +138,13 @@ with filter_container:
         year_popover = st.popover("📅 Years", use_container_width=True)
         with year_popover:
             st.subheader("Released After")
-            year_options = ["2000", "2010", "2015", "2020"]
+            
+            
+            if st.button("Clear Selection", key="clear_years"):
+                st.session_state.year_filter = []
+                for option in year_options:
+                    st.session_state[f"year_{option}"] = False
+            
             selected_years = []
             for option in year_options:
                 if st.checkbox(option, key=f"year_{option}"):
@@ -154,7 +160,13 @@ with filter_container:
         type_popover = st.popover("🎬 Type", use_container_width=True)
         with type_popover:
             st.subheader("Content Type")
-            type_options = ["Movie", "TV Show"]
+            
+            
+            if st.button("Clear Selection", key="clear_types"):
+                st.session_state.type_filter = []
+                for option in type_options:
+                    st.session_state[f"type_{option}"] = False
+            
             selected_types = []
             for option in type_options:
                 if st.checkbox(option, key=f"type_{option}"):
