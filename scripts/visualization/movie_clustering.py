@@ -300,6 +300,7 @@ def render_movie_clustering_ui(sample_size=None):
                 ["pca", "umap", "tsne"],
                 index=0,  # Default to PCA for speed
                 help="Method used to reduce embedding dimensions for visualization"
+                
             )
             
             clustering_method = st.selectbox(
