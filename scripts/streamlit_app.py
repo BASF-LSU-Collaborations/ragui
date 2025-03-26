@@ -17,7 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS (modified to accommodate popover styling)
+# Custom CSS 
 st.markdown("""
     <style>
     body {
@@ -25,39 +25,35 @@ st.markdown("""
         color: white;
     }
     
-    /* Popover Container */
-    .popover-container {
-        display: flex;
-        justify-content: flex-start;
-        gap: 15px;
-        margin-bottom: 20px;
+    /* Main container for filters */
+    .stPopover {
+        margin-right: 0 !important;
     }
     
-    .popover-item {
-        margin-right: 10px;
+    /* Column spacing adjustment */
+    [data-testid="column"] {
+        padding: 0 2px !important;
+        margin: 0 !important;
+        gap: 0 !important;
     }
     
-    /* Rest of the previous styling remains the same */
+    /* Button spacing */
+    .stButton>button {
+        margin-left: 0 !important;
+    }
+    
     .stForm .stTextInput > div > div > input {
         width: 100% !important;
         padding: 10px !important;
-        border-radius: 8px !important;
-        border: 2px solid #E50914 !important;
         background-color: #222 !important;
         color: white !important;
         font-size: 16px !important;
     }
     
     .stForm button {
-        background-color: #E50914 !important;
-        color: white !important;
         border-radius: 8px !important;
         padding: 10px 24px !important;
-        transition: background 0.3s ease-in-out !important;
-    }
-    
-    .stForm button:hover {
-        background-color: #A0070E !important;
+        transition: background 0.6s ease-in-out !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -118,27 +114,15 @@ def submit_form():
 # Title for the app
 st.title("🎬 Movie Recommendation Assistant")
 
-# Add CSS for compact filters
-st.markdown("""
-    <style>
-        div[data-testid="column"] {
-            padding: 0px 2px !important;
-            margin: 0px !important;
-        }
-        button[data-testid="baseButton-popover"] {
-            min-width: 100px !important;
-            padding: 0.25rem 0.5rem !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
 
 # Filter container
 filter_container = st.container()
 with filter_container:
-    col1, col2, col3 = st.columns(3, gap="small")
+    # Use columns with gap="small" and adjusted widths
+    col1, col2, col3 = st.columns([1,1,1], gap="small")
     
     with col1:
-        rating_popover = st.popover("📊 Ratings")
+        rating_popover = st.popover("📊 Ratings", use_container_width=True)
         with rating_popover:
             st.subheader("Select Ratings")
             rating_options = ["G", "PG", "PG-13", "R", "TV-MA", "TV-14", "TV-PG", "TV-Y7"]
@@ -149,9 +133,9 @@ with filter_container:
             st.session_state.rating_filter = selected_ratings
             if selected_ratings:
                 st.write("Selected: " + ", ".join(selected_ratings))
-    
+        
     with col2:
-        year_popover = st.popover("📅 Years")
+        year_popover = st.popover("📅 Years", use_container_width=True)
         with year_popover:
             st.subheader("Released After")
             year_options = ["2000", "2010", "2015", "2020"]
@@ -165,9 +149,9 @@ with filter_container:
             st.session_state.year_filter = selected_years
             if selected_years:
                 st.write("Selected: " + ", ".join(selected_years))
-    
+        
     with col3:
-        type_popover = st.popover("🎬 Type")
+        type_popover = st.popover("🎬 Type", use_container_width=True)
         with type_popover:
             st.subheader("Content Type")
             type_options = ["Movie", "TV Show"]
@@ -181,7 +165,7 @@ with filter_container:
             st.session_state.type_filter = selected_types
             if selected_types:
                 st.write("Selected: " + ", ".join(selected_types))
-
+                 
 # Display previous messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
