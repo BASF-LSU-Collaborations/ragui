@@ -4,7 +4,7 @@ import urllib.parse
 import os
 
 # Import the document RAG function
-from scripts.rag.rag_BASF import document_rag
+from _deprecated.rag_BASF import document_rag
 
 def render_document_search_tab():
     """
@@ -84,7 +84,7 @@ def render_document_search_tab():
             response, unique_sources = document_rag(user_input, chat_history, st.session_state.filters)
         
         # Replace with your actual server URL
-        base_url = "http://localhost:8005"
+        base_url = "http://localhost:8069"
         
         # Store sources in session state for persistent display
         if "source_documents" not in st.session_state:
@@ -101,7 +101,7 @@ def render_document_search_tab():
             ai_content += "**Unique Source Files Used:**\n"
             
             # Replace with your actual server URL
-            base_url = "http://localhost:8005"
+            base_url = "http://localhost:8069"
             
             for source, path in unique_sources.items():
                 # Properly handle the path for URL
@@ -119,12 +119,26 @@ def render_document_search_tab():
         chat_response = {"role": "assistant", "content": ai_content}
         st.session_state.messages.append(chat_response)
         
-        # Display AI response - using chat_container ensures it appears in the right order
+        # Add after displaying the AI response
+        # Inside the if st.session_state.form_submitted: block
+                
+        # Display AI response
         with chat_container:
             with st.chat_message("assistant"):
                 st.markdown(ai_content, unsafe_allow_html=True)
-        
-        # No longer displaying the separate Documents Used section
+
+        # Add a button to visualize the results
+        if st.button("📊 Visualize Document Relationships", key="visualize_button"):
+            # Store the query for use in tab 2
+            st.session_state.last_search_query = user_input
+            # Set the flag to switch to tab 2
+            st.session_state.switch_to_tab2 = True
+            # We need to remove the active_tab variable to avoid conflicts
+            if "active_tab" in st.session_state:
+                del st.session_state.active_tab
+            # Rerun to update the UI
+            st.rerun()
+
         # Reset submission flag for next question
         st.session_state.form_submitted = False
 

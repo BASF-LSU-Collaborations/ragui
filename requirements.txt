@@ -6,6 +6,7 @@ asttokens @ file:///opt/conda/conda-bld/asttokens_1646925590279/work
 attrs==25.3.0
 backoff==2.2.1
 bcrypt==4.3.0
+beautifulsoup4==4.13.4
 blinker==1.9.0
 build==1.2.2.post1
 cachetools==5.5.2
@@ -16,22 +17,31 @@ chromadb==0.6.3
 click==8.1.8
 coloredlogs==15.0.1
 comm @ file:///work/perseverance-python-buildout/croot/comm_1728387093347/work
+contourpy==1.3.1
+cycler==0.12.1
 debugpy @ file:///croot/debugpy_1736267418885/work
 decorator @ file:///opt/conda/conda-bld/decorator_1643638310831/work
 Deprecated==1.2.18
 distro==1.9.0
 durationpy==0.9
+entrypoints==0.4
 executing @ file:///opt/conda/conda-bld/executing_1646925071911/work
+Faker==37.1.0
 fastapi==0.115.12
+fastjsonschema @ file:///io/buildout/croot/python-fastjsonschema_1735874150137/work
+favicon==0.7.0
 filelock==3.18.0
 flatbuffers==25.2.10
+fonttools==4.56.0
 fsspec==2025.3.0
 gitdb==4.0.12
 GitPython==3.1.44
 google-auth==2.38.0
 googleapis-common-protos==1.69.2
+greenlet==3.1.1
 grpcio==1.71.0
 h11==0.14.0
+htbuilder==0.9.0
 httpcore==1.0.7
 httptools==0.6.4
 httpx==0.28.1
@@ -50,17 +60,24 @@ jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 jupyter_client @ file:///io/buildout/croot/jupyter_client_1739558249609/work
 jupyter_core @ file:///work/perseverance-python-buildout/croot/jupyter_core_1728385169811/work
+kiwisolver==1.4.8
 kubernetes==32.0.1
+lxml==5.4.0
+Markdown==3.8
 markdown-it-py==3.0.0
+markdownlit==0.0.7
 MarkupSafe==3.0.2
+matplotlib==3.10.1
 matplotlib-inline @ file:///io/buildout/croot/matplotlib-inline_1732912690718/work
 mdurl==0.1.2
 mmh3==5.1.0
 monotonic==1.6
 mpmath==1.3.0
 narwhals==1.32.0
+nbformat @ file:///work/perseverance-python-buildout/croot/nbformat_1728385580878/work
 nest_asyncio @ file:///work/perseverance-python-buildout/croot/nest-asyncio_1728387361665/work
 networkx==3.4.2
+nltk==3.9.1
 numpy==2.2.4
 nvidia-cublas-cu12==12.4.5.8
 nvidia-cuda-cupti-cu12==12.4.127
@@ -94,12 +111,16 @@ packaging @ file:///croot/packaging_1734472117206/work
 pandas==2.2.3
 parso @ file:///croot/parso_1733963305961/work
 pexpect @ file:///tmp/build/80754af9/pexpect_1605563209008/work
+pgvector==0.4.0
 pillow==11.1.0
 platformdirs @ file:///work/perseverance-python-buildout/croot/platformdirs_1728384968048/work
+plotly==6.0.1
 posthog==3.21.0
+prometheus_client==0.21.1
 prompt_toolkit @ file:///work/perseverance-python-buildout/croot/prompt-toolkit_1728511366266/work
 protobuf==5.29.4
 psutil @ file:///croot/psutil_1736367091698/work
+psycopg2-binary==2.9.10
 ptyprocess @ file:///tmp/build/80754af9/ptyprocess_1609355006118/work/dist/ptyprocess-0.7.0-py2.py3-none-any.whl
 pure-eval @ file:///opt/conda/conda-bld/pure_eval_1646925070566/work
 pyarrow==19.0.1
@@ -109,6 +130,8 @@ pydantic==2.10.6
 pydantic_core==2.27.2
 pydeck==0.9.1
 Pygments @ file:///work/perseverance-python-buildout/croot/pygments_1728385655722/work
+pymdown-extensions==10.14.3
+pyparsing==3.2.3
 PyPika==0.48.9
 pyproject_hooks==1.2.0
 python-dateutil @ file:///work/perseverance-python-buildout/croot/python-dateutil_1728385355105/work
@@ -126,15 +149,31 @@ rsa==4.9
 safetensors==0.5.3
 scikit-learn==1.6.1
 scipy==1.15.2
+seaborn==0.13.2
 sentence-transformers==3.4.1
 setuptools==75.8.0
 shellingham==1.5.4
 six @ file:///tmp/build/80754af9/six_1644875935023/work
 smmap==5.0.2
 sniffio==1.3.1
+soupsieve==2.7
+SQLAlchemy==2.0.40
+sqlmodel==0.0.24
+st-annotated-text==4.0.2
+st-theme==1.2.3
 stack-data @ file:///opt/conda/conda-bld/stack_data_1646927590127/work
 starlette==0.46.1
 streamlit==1.43.2
+streamlit-avatar==0.1.3
+streamlit-camera-input-live==0.2.0
+streamlit-card==1.0.2
+streamlit-embedcode==0.1.2
+streamlit-extras==0.6.0
+streamlit-faker==0.0.3
+streamlit-image-coordinates==0.1.9
+streamlit-keyup==0.3.0
+streamlit-toggle-switch==1.0.2
+streamlit-vertical-slider==2.5.5
 sympy==1.13.1
 tenacity==9.0.0
 threadpoolctl==3.6.0
@@ -152,6 +191,7 @@ tzdata==2025.2
 urllib3==2.3.0
 uvicorn==0.34.0
 uvloop==0.21.0
+validators==0.34.0
 watchdog==6.0.0
 watchfiles==1.0.4
 wcwidth @ file:///Users/ktietz/demo/mc3/conda-bld/wcwidth_1629357192024/work
