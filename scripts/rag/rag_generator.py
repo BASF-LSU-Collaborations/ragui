@@ -63,7 +63,7 @@ rag_response_schema: Dict[str, Any] = {
 
 # --- Core Generation Function ---
 
-def generate_response_from_context(query: str, context_block: str) -> Dict[str, Any]:
+def generate_response_from_context(query: str, context_block: str, chat_history: List[Dict[str, str]] = []) -> Dict[str, Any]:
     """
     Generates a structured JSON response using an LLM based on the user query
     and retrieved context. The output always includes 'answer' and a list of
@@ -117,6 +117,7 @@ If no answer is found, set 'answer' to a note indicating none and 'sources' to [
             model=LLM_MODEL,
             input=[
                 {"role": "system", "content": system_message},
+                *chat_history,
                 {"role": "user",   "content": user_prompt}
             ],
             text={

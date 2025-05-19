@@ -132,6 +132,7 @@ pydeck==0.9.1
 Pygments @ file:///work/perseverance-python-buildout/croot/pygments_1728385655722/work
 pymdown-extensions==10.14.3
 pyparsing==3.2.3
+PyPDF2==3.0.1
 PyPika==0.48.9
 pyproject_hooks==1.2.0
 python-dateutil @ file:///work/perseverance-python-buildout/croot/python-dateutil_1728385355105/work
