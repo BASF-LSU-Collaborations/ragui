@@ -1,117 +1,83 @@
-# 🎬 Movie Recommendation System
+# Artificial Retrieval Intelligence (RAGUI)
 
-This project builds a **movie recommendation system** using **OpenAI embeddings** and **ChromaDB**. It processes movie data, stores embeddings, and provides a **Streamlit-based UI** for querying movie recommendations.
+A modular Streamlit application for interacting with retrieval-augmented AI systems.
+Includes a tabbed UI with a chat interface and document explorer.
 
 ---
 
-## **🚀 Setup Guide**
-### **1️⃣ Create and Activate a Virtual Environment**
-Before running any scripts, it's recommended to create and activate a virtual environment:
+## 📁 Project Structure
 
-```sh
-# Create a virtual environment (only needed once)
-python -m venv venv
-
-# Activate the virtual environment
-# On macOS/Linux:
-source venv/bin/activate
-
-# On Windows:
-venv\Scripts\activate
+```
+ragui/
+├── public/                        # Static assets (e.g., images, icons)
+├── scripts/
+│   ├── ari_streamlit.py          # Main Streamlit app (Tabbed UI)
+│   └── simple_file_server.py     # Local file server to expose files to the app
+│
+├── tab1/
+│   └── chat.py                   # Chat tab content renderer
+│
+├── tab3/
+│   └── document_explorer_tab.py # Document explorer tab content renderer
+│
+├── requirements.txt              # Project dependencies
+└── README.md                     # You're here
 ```
 
-### **2️⃣ Install Dependencies**
-Ensure you have all required Python packages installed:
+---
 
-```sh
+## 🔧 Setup
+
+1. **Create Conda environment**
+
+```bash
+conda create -n ragui_env python=3.11
+conda activate ragui_env
+```
+
+2. **Install dependencies**
+
+```bash
 pip install -r requirements.txt
 ```
 
 ---
 
-## **🔄 Running the Data Processing Pipeline**
-The data processing pipeline **downloads, extracts, and stores movie data**, then generates embeddings for efficient retrieval.
+## 🚀 Running the App
 
-### **Step 1: Download Netflix Movie Dataset**
-This script downloads raw movie data from HuggingFace and saves it in `data/`.
+### 1. Start the Local File Server (Optional)
 
-```sh
-python scripts/data_processing/1a_download_netflix_data.py
+If your app needs to serve local files via HTTP:
+
+```bash
+python scripts/simple_file_server.py
 ```
 
-### **Step 2: Extract Movie Descriptions**
-This extracts **movie descriptions** and **metadata** into JSON format.
+* This will start an HTTP server at an available port (default: `8069` or the next open one).
+* The port number will be saved in: `~/file_server_port.txt`.
 
-```sh
-python scripts/data_processing/1b_extract_movie_descriptions.py
-```
-
-### **Step 3: Store Data & Generate Embeddings**
-This script processes descriptions and **stores embeddings** in ChromaDB.
-
-```sh
-python scripts/data_processing/1c_store_movie_data.py
-```
-
-**(Optional)** If you need to re-run specific parts, you can execute individual scripts.
+> 📂 The root `/` directory is exposed, so access with caution.
 
 ---
 
-## **💡 Running the Streamlit App**
-Once data is processed and embeddings are stored, run the Streamlit app for interactive recommendations.
+### 2. Run the Streamlit App
 
-### **Run the App**
-```sh
-streamlit run scripts/streamlit_app.py
+In a separate terminal:
+
+```bash
+streamlit run scripts/ari_streamlit.py
 ```
-This will start a local web server and open the **Movie Recommendation Assistant** in your browser.
+
+* Opens a tabbed UI with:
+
+  * 💬 **Chat** interface (`tab1/chat.py`)
+  * 📄 **Document Explorer** (`tab3/document_explorer_tab.py`)
 
 ---
 
-## **📂 Project Structure**
-```
-ragui
-├── chroma_db/                  # Stores ChromaDB embeddings
-├── data/                        # Stores processed movie data
-│   ├── netflix_movies.json      # Raw movie data
-│   ├── movie_descriptions.json  # Extracted descriptions
-│   ├── movie_metadata.json      # Metadata for filtering
-├── docs/                        # Documentation files
-├── scripts/
-│   ├── data_processing/         # Prepares and processes data
-│   │   ├── 1a_download_netflix_data.py
-│   │   ├── 1b_extract_movie_descriptions.py
-│   │   ├── 1c_store_movie_data.py
-│   ├── rag/                     # Retrieval-Augmented Generation (RAG) logic
-│   │   ├── rag_retrieval.py
-│   ├── streamlit_app.py         # The main UI app
-├── requirements.txt             # Python dependencies
-├── venv/                        # Virtual environment (optional)
-```
+## 🛠 Troubleshooting
 
----
+* If you see an import error like `Failed to import from chat_page.py`, make sure:
 
-## **📌 Troubleshooting**
-### **1️⃣ `OPENAI_API_KEY` Not Found**
-Ensure you have an **`.env` file** with your OpenAI API key:
-```sh
-echo "OPENAI_API_KEY=your-api-key-here" > .env
-```
-Restart your terminal and run the scripts again.
-
-### **2️⃣ Streamlit Not Found?**
-Make sure it’s installed in your environment:
-```sh
-pip install streamlit
-```
-
-### **3️⃣ ChromaDB Not Found?**
-Ensure ChromaDB is installed:
-```sh
-pip install chromadb
-```
-
----
-
-## **📜 License**
-This project is licensed under the MIT License. 🚀
+  * You're running from the project root (`~/ragui`)
+  * All necessary files (`chat.py`, `document_explorer_tab.py`) are present and correct
